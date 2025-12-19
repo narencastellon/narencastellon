@@ -1,101 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naren Castellón - Especialista en Series de Tiempo</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; }
+        .sidenav {
+            height: 100%; width: 300px; position: fixed; z-index: 1; top: 0; left: 0;
+            background: #2c3e50; overflow-x: hidden; transition: 0.5s; padding-top: 60px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        }
+        .sidenav a {
+            padding: 15px 30px; text-decoration: none; font-size: 17px; color: #ecf0f1;
+            display: block; transition: 0.3s;
+        }
+        .sidenav a:hover { background: #34495e; }
+        .sidenav .category {
+            font-weight: bold; color: #3498db; cursor: pointer; padding: 18px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .submenu { display: none; background: #34495e; }
+        .submenu a { font-size: 16px; padding-left: 50px; color: #bdc3c7; }
+        .submenu a:hover { background: #2c3e50; color: #fff; }
+        #main {
+            margin-left: 300px; padding: 40px; transition: margin-left 0.5s;
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        .content-box {
+            background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-top: 20px; line-height: 1.6;
+        }
+        .code-box {
+            background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px;
+            font-family: 'Courier New', monospace; overflow-x: auto;
+        }
+        pre { margin: 0; white-space: pre-wrap; }
+        .profile-img {
+            width: 200px; height: 200px; border-radius: 50%; object-fit: cover;
+            border: 5px solid #3498db; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: block; margin: 20px auto;
+        }
+        @media (max-width: 992px) {
+            .sidenav { width: 0; }
+            #main { margin-left: 0; }
+            .openbtn { display: block; }
+        }
+        .openbtn {
+            position: fixed; top: 20px; left: 20px; font-size: 30px; cursor: pointer;
+            background: #3498db; color: white; padding: 10px 18px; border: none;
+            border-radius: 8px; z-index: 2; display: none;
+        }
+    </style>
+</head>
+<body>
+
+<button class="openbtn" onclick="openNav()">☰</button>
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" style="position:absolute;top:0;right:25px;font-size:36px;" onclick="closeNav()">&times;</a>
+
+    <a href="#" onclick="showContent('about')">Acerca de</a>
+
+    <div class="category" onclick="toggleSubmenu(this)">1. Modelos Clásicos</div>
+    <div class="submenu">
+        <a href="#" onclick="showContent('ARIMA')">Modelo ARMA - Food Delivery</a>
+        <a href="#" onclick="showContent('HoltWinters')">Modelo Holt-Winters</a>
+        <a href="#" onclick="showContent('TBATS')">Modelo TBATS</a>
+        <a href="#" onclick="showContent('Prophet')">Modelo Prophet</a>
+    </div>
+
+    <div class="category" onclick="toggleSubmenu(this)">2. Modelos Machine Learning</div>
+    <div class="submenu">
+        <a href="#" onclick="showContent('RegresionLineal')">Regresión Lineal</a>
+        <a href="#" onclick="showContent('RandomForest')">Random Forest</a>
+        <a href="#" onclick="showContent('XGBoost')">XGBoost</a>
+        <a href="#" onclick="showContent('CatBoost')">CatBoost</a>
+        <a href="#" onclick="showContent('LightGBM')">LightGBM</a>
+    </div>
+
+    <div class="category" onclick="toggleSubmenu(this)">3. Modelos Deep Learning</div>
+    <div class="submenu">
+        <a href="#" onclick="showContent('MLP')">Modelo MLP</a>
+        <a href="#" onclick="showContent('LSTM')">Modelo LSTM</a>
+        <a href="#" onclick="showContent('TimesNet')">Modelo TimesNet</a>
+        <a href="#" onclick="showContent('KAN')">Modelo KAN</a>
+        <a href="#" onclick="showContent('RMoK')">Modelo RMoK</a>
+    </div>
+
+    <div class="category" onclick="toggleSubmenu(this)">Consultoría</div>
+    <div class="submenu">
+        <a href="#" onclick="showContent('desarrollo')">Desarrollo de Modelos</a>
+        <a href="#" onclick="showContent('capacitacion')">Capacitación</a>
+    </div>
+</div>
+
+<div id="main">
+    <h1>Naren Castellón - Especialista en Series de Tiempo</h1>
+    <p>Selecciona una opción del menú lateral para ver información detallada.</p>
+
+    <!-- Contenido dinámico -->
+    <div id="content-area"></div>
+</div>
+
 <script>
-    // Open the sidenav
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
-    }
+    function openNav() { document.getElementById("mySidenav").style.width = "300px"; document.getElementById("main").style.marginLeft = "300px"; }
+    function closeNav() { document.getElementById("mySidenav").style.width = "0"; document.getElementById("main").style.marginLeft = "0"; }
 
-    // Close the sidenav
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
-    }
-
-    // Toggle submenu visibility
-    function toggleSubmenu(element) {
-        const submenu = element.nextElementSibling;
+    function toggleSubmenu(el) {
+        const submenu = el.nextElementSibling;
         submenu.style.display = submenu.style.display === "block" ? "none" : "block";
     }
 
-    // Show Python code example for selected model
-    function showCode(modelName) {
-        const codeDisplay = document.getElementById("code-display");
-        const codeContent = document.getElementById("code-content");
-        
-        let codeExample = '';
-        switch(modelName) {
-            case 'Regression Linear':
-                codeExample = `# Ejemplo de Regresión Lineal para Series de Tiempo
+    function showContent(section) {
+        const area = document.getElementById("content-area");
+        area.innerHTML = '';
+
+        let html = '';
+
+        if (section === 'about') {
+            html = `
+                <div class="content-box">
+                    <img src="https://media.licdn.com/dms/image/v2/D4E03AQF0Z0Z0Z0Z0Z0/profile-displayphoto-shrink_800_800/0/1710000000000?e=2147483647&v=beta&t=TuFotoRealAqui" alt="Naren Castellón" class="profile-img">
+                    <h2>Acerca de mí</h2>
+                    <p><strong>Naren Castellón</strong></p>
+                    <p>Ubicación: Managua, Nicaragua</p>
+                    <p>Especialista en Series de Tiempo, Machine Learning, Deep Learning, Data Science, Matemáticas, Estadística y Finanzas.</p>
+                    <p>Experiencia en pronóstico de ventas, demanda y más, con herramientas como StatsForecast, MLForecast, NeuralForecast, XGBoost y CatBoost.</p>
+                    <p>Creador de contenido en YouTube sobre forecasting y data science.</p>
+                    <p>LinkedIn: <a href="https://www.linkedin.com/in/naren-castellon-1541b8101/" target="_blank">Naren Castellón</a></p>
+                    <p>YouTube: <a href="https://www.youtube.com/@narencastellon" target="_blank">@narencastellon</a></p>
+                </div>`;
+        } else if (section === 'desarrollo') {
+            html = `
+                <div class="content-box">
+                    <h2>Consultoría: Desarrollo de Modelos</h2>
+                    <p>Desarrollo de soluciones personalizadas de forecasting y análisis predictivo.</p>
+                    <ul>
+                        <li>Modelos estadísticos, ML y DL adaptados a tus datos</li>
+                        <li>Pipelines automatizados</li>
+                        <li>Integración con Python, Streamlit, etc.</li>
+                    </ul>
+                </div>`;
+        } else if (section === 'capacitacion') {
+            html = `
+                <div class="content-box">
+                    <h2>Consultoría: Capacitación</h2>
+                    <p>Cursos y talleres prácticos.</p>
+                    <ul>
+                        <li>Introducción a series de tiempo</li>
+                        <li>Modelos avanzados (ARIMA, Prophet, NeuralForecast)</li>
+                        <li>Implementación en Python</li>
+                    </ul>
+                </div>`;
+        } else if (section === 'ARIMA') {
+            html = `
+                <div class="content-box">
+                    <h2>Modelo ARMA - Food Delivery</h2>
+                    <p>Notebook completo con ejemplo práctico de modelo ARMA aplicado a datos de food delivery:</p>
+                    <iframe src="https://github.com/narencastellon/Serie-de-tiempo-con-Machine-Learning/blob/main/Modulo%2010.1%20Modelo%20Arima.ipynb" 
+                            width="100%" 
+                            height="900px" 
+                            style="border:none; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+                    </iframe>
+                    <p style="margin-top:20px; text-align:center;">
+                        <small>
+                            Si el notebook no carga correctamente, ábrelo aquí:<br>
+                            <a href="https://nbviewer.org/github/narencastellon/narencastellon/blob/main/Modelo%20ARMA%20-%20food-delivery.ipynb" target="_blank">Ver en nbviewer</a> 
+                            | 
+                            <a href="https://colab.research.google.com/github/narencastellon/narencastellon/blob/main/Modelo%20ARMA%20-%20food-delivery.ipynb" target="_blank">Ejecutar en Google Colab</a>
+                        </small>
+                    </p>
+                </div>`;
+        } else {
+            let modelName = section.replace(/([A-Z])/g, ' $1').trim();
+            let code = `# Ejemplo básico para ${modelName}\n# Pronto más detalles...`;
+
+            if (section === 'RegresionLineal') {
+                code = `# Regresión Lineal simple para tendencia
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
-# Crear datos de ejemplo (o cargar tu serie real)
-dates = pd.date_range(start='2015-01-01', periods=100, freq='M')
-values = np.cumsum(np.random.randn(100)) + 100  # Tendencia + ruido
+dates = pd.date_range('2020-01', periods=50, freq='M')
+y = np.arange(50) * 2 + np.random.randn(50)*5 + 100
+df = pd.DataFrame({'ds': dates, 'y': y})
+df['trend'] = np.arange(len(df))
 
-df = pd.DataFrame({'ds': dates, 'y': values})
+model = LinearRegression().fit(df[['trend']], df['y'])
+forecast = model.predict(np.arange(50, 74).reshape(-1,1))
 
-# Feature engineering: usar el índice numérico como variable independiente
-df['time_index'] = np.arange(len(df))
-
-X = df[['time_index']]  # Variable independiente
-y = df['y']             # Variable dependiente
-
-# Entrenar el modelo
-model = LinearRegression()
-model.fit(X, y)
-
-# Predecir para los datos históricos y futuro
-future_steps = 24
-future_index = np.arange(len(df), len(df) + future_steps).reshape(-1, 1)
-forecast = model.predict(future_index)
-
-# Crear fechas futuras
-future_dates = pd.date_range(start=df['ds'].iloc[-1] + pd.DateOffset(months=1), periods=future_steps, freq='M')
-
-# Mostrar resultados
-print(f"Coeficiente (pendiente): {model.coef_[0]:.4f}")
-print(f"Intercepto: {model.intercept_:.4f}")
-
-# Gráfico
-plt.figure(figsize=(12, 6))
-plt.plot(df['ds'], df['y'], label='Datos Históricos', color='blue')
-plt.plot(future_dates, forecast, label='Pronóstico (Regresión Lineal)', color='red', linestyle='--')
-plt.title('Pronóstico con Regresión Lineal')
-plt.xlabel('Fecha')
-plt.ylabel('Valor')
+plt.plot(df['ds'], df['y'], label='Histórico')
+plt.plot(pd.date_range(df['ds'].iloc[-1], periods=25, freq='M')[1:], forecast, label='Pronóstico', linestyle='--')
 plt.legend()
-plt.grid(True)
 plt.show()`;
-                break;
+            } else if (section === 'LSTM') {
+                code = `# Ejemplo LSTM simple con Keras/TensorFlow
+import numpy as np
+import pandas as pd
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+import matplotlib.pyplot as plt
 
-            case 'ARIMA':
-                codeExample = `# ARIMA Example\nimport pandas as pd\nfrom statsmodels.tsa.arima.model import ARIMA\n\n# Cargar datos\ndf = pd.read_csv('tu_serie.csv', parse_dates=['date'], index_col='date')\n\n# Ajustar modelo ARIMA(p,d,q)\nmodel = ARIMA(df['value'], order=(5,1,0))\nmodel_fit = model.fit()\n\n# Pronóstico\nforecast = model_fit.forecast(steps=12)\nprint(forecast)`;
-                break;
+dates = pd.date_range('2020-01', periods=100, freq='M')
+y = np.cumsum(np.random.randn(100)) + 100
+data = y.reshape(-1,1)
 
-            case 'Holt-Winters':
-                codeExample = `# Holt-Winters Example\nimport pandas as pd\nfrom statsmodels.tsa.holtwinters import ExponentialSmoothing\n\n# Cargar datos\ndf = pd.read_csv('tu_serie.csv', parse_dates=['date'], index_col='date')\n\n# Modelo aditivo con estacionalidad mensual\nmodel = ExponentialSmoothing(df['value'], seasonal='add', seasonal_periods=12)\nfit = model.fit()\n\n# Pronóstico\nforecast = fit.forecast(12)\nprint(forecast)`;
-                break;
+def create_sequences(data, seq_length=12):
+    X, y = [], []
+    for i in range(len(data)-seq_length):
+        X.append(data[i:i+seq_length])
+        y.append(data[i+seq_length])
+    return np.array(X), np.array(y)
 
-            // Puedes agregar más ejemplos aquí en el futuro
+X, y = create_sequences(data)
+X_train, y_train = X[:80], y[:80]
 
-            default:
-                codeExample = `# Ejemplo para ${modelName}\n# Agrega tu código Python aquí`;
+model = Sequential([LSTM(50, input_shape=(12,1)), Dense(1)])
+model.compile(optimizer='adam', loss='mse')
+model.fit(X_train, y_train, epochs=50, verbose=0)
+
+forecast = model.predict(X[-1:].reshape(1,12,1), verbose=0)
+print('Pronóstico próximo valor:', forecast[0][0])`;
+            } else if (section === 'RandomForest') {
+                code = `# Ejemplo Random Forest con lags
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+import matplotlib.pyplot as plt
+
+dates = pd.date_range('2020-01', periods=100, freq='M')
+y = np.cumsum(np.random.randn(100)) + 100
+df = pd.DataFrame({'ds': dates, 'y': y})
+
+for lag in range(1,13):
+    df[f'lag_{lag}'] = df['y'].shift(lag)
+df.dropna(inplace=True)
+
+X = df[[col for col in df.columns if 'lag' in col]]
+y = df['y']
+
+model = RandomForestRegressor(n_estimators=100)
+model.fit(X[:-12], y[:-12])
+
+forecast = []
+last = X.iloc[-1].values
+for _ in range(12):
+    pred = model.predict(last.reshape(1,-1))[0]
+    forecast.append(pred)
+    last = np.roll(last, -1)
+    last[-1] = pred
+
+plt.plot(df['ds'], df['y'], label='Histórico')
+plt.plot(pd.date_range(df['ds'].iloc[-1], periods=13, freq='M')[1:], forecast, label='Pronóstico RF', linestyle='--')
+plt.legend()
+plt.show()`;
+            }
+
+            html = `
+                <div class="content-box">
+                    <h2>${modelName}</h2>
+                    <p>Ejemplo práctico en Python:</p>
+                    <div class="code-box">
+                        <pre>${code}</pre>
+                    </div>
+                </div>`;
         }
-        
-        codeContent.textContent = codeExample;
-        codeDisplay.style.display = "block";
-        codeDisplay.scrollIntoView({ behavior: 'smooth' });
+
+        area.innerHTML = html;
+        area.scrollIntoView({behavior: "smooth"});
     }
 
-    // Cerrar el menú al hacer clic fuera (opcional, mejora la experiencia)
-    document.addEventListener('click', function(event) {
-        const sidenav = document.getElementById("mySidenav");
-        const openbtn = document.querySelector('.openbtn');
-        if (!sidenav.contains(event.target) && event.target !== openbtn) {
-            closeNav();
-        }
-    });
+    window.onload = function() { showContent('about'); };
 </script>
+
+</body>
+</html>
