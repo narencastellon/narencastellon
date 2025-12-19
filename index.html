@@ -1,0 +1,101 @@
+<script>
+    // Open the sidenav
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    // Close the sidenav
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+
+    // Toggle submenu visibility
+    function toggleSubmenu(element) {
+        const submenu = element.nextElementSibling;
+        submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+
+    // Show Python code example for selected model
+    function showCode(modelName) {
+        const codeDisplay = document.getElementById("code-display");
+        const codeContent = document.getElementById("code-content");
+        
+        let codeExample = '';
+        switch(modelName) {
+            case 'Regression Linear':
+                codeExample = `# Ejemplo de Regresión Lineal para Series de Tiempo
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+# Crear datos de ejemplo (o cargar tu serie real)
+dates = pd.date_range(start='2015-01-01', periods=100, freq='M')
+values = np.cumsum(np.random.randn(100)) + 100  # Tendencia + ruido
+
+df = pd.DataFrame({'ds': dates, 'y': values})
+
+# Feature engineering: usar el índice numérico como variable independiente
+df['time_index'] = np.arange(len(df))
+
+X = df[['time_index']]  # Variable independiente
+y = df['y']             # Variable dependiente
+
+# Entrenar el modelo
+model = LinearRegression()
+model.fit(X, y)
+
+# Predecir para los datos históricos y futuro
+future_steps = 24
+future_index = np.arange(len(df), len(df) + future_steps).reshape(-1, 1)
+forecast = model.predict(future_index)
+
+# Crear fechas futuras
+future_dates = pd.date_range(start=df['ds'].iloc[-1] + pd.DateOffset(months=1), periods=future_steps, freq='M')
+
+# Mostrar resultados
+print(f"Coeficiente (pendiente): {model.coef_[0]:.4f}")
+print(f"Intercepto: {model.intercept_:.4f}")
+
+# Gráfico
+plt.figure(figsize=(12, 6))
+plt.plot(df['ds'], df['y'], label='Datos Históricos', color='blue')
+plt.plot(future_dates, forecast, label='Pronóstico (Regresión Lineal)', color='red', linestyle='--')
+plt.title('Pronóstico con Regresión Lineal')
+plt.xlabel('Fecha')
+plt.ylabel('Valor')
+plt.legend()
+plt.grid(True)
+plt.show()`;
+                break;
+
+            case 'ARIMA':
+                codeExample = `# ARIMA Example\nimport pandas as pd\nfrom statsmodels.tsa.arima.model import ARIMA\n\n# Cargar datos\ndf = pd.read_csv('tu_serie.csv', parse_dates=['date'], index_col='date')\n\n# Ajustar modelo ARIMA(p,d,q)\nmodel = ARIMA(df['value'], order=(5,1,0))\nmodel_fit = model.fit()\n\n# Pronóstico\nforecast = model_fit.forecast(steps=12)\nprint(forecast)`;
+                break;
+
+            case 'Holt-Winters':
+                codeExample = `# Holt-Winters Example\nimport pandas as pd\nfrom statsmodels.tsa.holtwinters import ExponentialSmoothing\n\n# Cargar datos\ndf = pd.read_csv('tu_serie.csv', parse_dates=['date'], index_col='date')\n\n# Modelo aditivo con estacionalidad mensual\nmodel = ExponentialSmoothing(df['value'], seasonal='add', seasonal_periods=12)\nfit = model.fit()\n\n# Pronóstico\nforecast = fit.forecast(12)\nprint(forecast)`;
+                break;
+
+            // Puedes agregar más ejemplos aquí en el futuro
+
+            default:
+                codeExample = `# Ejemplo para ${modelName}\n# Agrega tu código Python aquí`;
+        }
+        
+        codeContent.textContent = codeExample;
+        codeDisplay.style.display = "block";
+        codeDisplay.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Cerrar el menú al hacer clic fuera (opcional, mejora la experiencia)
+    document.addEventListener('click', function(event) {
+        const sidenav = document.getElementById("mySidenav");
+        const openbtn = document.querySelector('.openbtn');
+        if (!sidenav.contains(event.target) && event.target !== openbtn) {
+            closeNav();
+        }
+    });
+</script>
